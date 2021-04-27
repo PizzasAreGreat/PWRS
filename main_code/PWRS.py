@@ -96,8 +96,14 @@ def drawLoopButtons(width, height, size1, size2, text):
     
     screen.blit(text , (width + 50, height))
 
+def failurecheck() :
+    if  loop1failure is True or loop1completefailure is True or loop2failure is True or loop2completefailure is True or loop3failure is True or loop3completefailure is True :
+        return True
+    else :
+        return False
+
 def gameaudio():
- if  loop1failure is True or loop1completefailure is True or loop2failure is True or loop2completefailure is True or loop3failure is True or loop3completefailure is True :
+ if  failurecheck() is True:
    playsound('failure.mp3')
 
 
