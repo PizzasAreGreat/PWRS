@@ -94,7 +94,7 @@ def drawLoopButtons(width, height, size1, size2, text):
     else: 
         pygame.draw.rect(screen, green, [width, height,140,40])
     
-    screen.blit(text , (width + 50, height))
+    screen.blit(text , (int(width) + 50, height))
 
 def failurecheck() :
     if  loop1failure is True or loop1completefailure is True or loop2failure is True or loop2completefailure is True or loop3failure is True or loop3completefailure is True :
