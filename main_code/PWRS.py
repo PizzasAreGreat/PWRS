@@ -110,7 +110,7 @@ def gameaudio():
     
 # welcome message
 input("Welcome to the PWRS, the Pressurized Water Reactor Simulator, a realistic nuclear reactor simulator on python \n which gives to the user a very complete control of the main reactor features \n we perfectly know that this simulation might lack some feature that would seriously increse it's \n realism, but please keep in mind that this is a beta version. \n press enter to start the simulation")
-playsound('systemready.mp3')
+playsound(r'systemready.mp3')
 #audio management thread startup
 class audioThread(threading.Thread):
   def __init__(self):
