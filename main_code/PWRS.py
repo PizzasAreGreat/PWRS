@@ -2,8 +2,6 @@
 import pygame
 from time import *
 from random import *
-from playsound import *
-import threading
 print("  _______ _      _____       _            ")
 print(" |__   __| |    |  __ \     (_)           ")
 print("    | |  | |    | |__) |     _ _ __   ___ ")
@@ -14,14 +12,21 @@ print("                     TLR inc")
 print("////////////// /!\logiciel sous credits/!\ /////////////////")
 print("////////////////////////ver 0.4/////////////////////////////")
 sleep(3)
+pygame.init() 
+pygame.mixer.init()
 #variables
-print("initialisation of the variables")
+#Sounds
+failure = pygame.mixer.Sound("failure.wav")
+gameover = pygame.mixer.Sound("gameover.wav")
+systemready = pygame.mixer.Sound("systemready.wav")
+
 #background variables
 red=(204,0,0)
 dark_red=(163,0,0)
 green=(0,125,0)
 dark_green=(0,100,0)
 alarm_mute=False
+
 #gameplay-related variables
 coretemp=0
 loop1=325
@@ -31,6 +36,7 @@ rods=0
 corepressure=0
 exchangertemp=0
 waterlevel=100
+  
 #waterlevel : 0 to 100 %
 rodfailure=False
 loop1failure=False
@@ -50,20 +56,22 @@ loop2pump2=True
 loop3pump1=True
 loop3pump2=True
 print("initialisation of the UI")
+
 #startup
-pygame.init() 
 res = (720, 720)
 screen = pygame.display.set_mode(res)
 color=(255,255,255)
 color_light=(170,170,170)
 color_dark=(100,100,100)
-#window.fill((184, 191, 194))
 width=screen.get_width()
 height=screen.get_height()
-smallfont = pygame.font.SysFont('Corbel',35) 
-text = smallfont.render('quit' , True , color) 
+smallfont = pygame.font.SysFont('corbel',35)
+print(smallfont)
+
+text = smallfont.render('quit' , 1 , color) 
+print(type(text))
 screen.fill((184, 191, 194))
-#pygame.display.update()  
+ 
 #functions and UI
 LOOP1PUMP1BUTTON = (height / 4, width / 3, 140, 40, "pump1") 
 LOOP1PUMP2BUTTON = (height / 4, 2 * width / 3, 140, 40, "pump 2")
@@ -71,6 +79,8 @@ LOOP2PUMP1BUTTON = (2 * height / 4, width / 3, 140, 40, "pump1")
 LOOP2PUMP2BUTTON = (2 * height / 4, 2 * width / 3, 140, 40, "pump2")
 LOOP3PUMP1BUTTON = (3 * height / 4, width / 3, 140, 40, "pump1")
 LOOP3PUMP2BUTTON = (3 * height / 4, 2 * width / 3, 140, 40, "pump2")
+
+
 def loopfailures(pump1, pump2):
     if pump1 is True and pump2 is True:
         return "Safe"
@@ -86,14 +96,14 @@ def failures(var, message1):
   else:
     print(message1, ": safe", sep = "")
 
-def drawLoopButtons(width, height, size1, size2, text):
+def drawLoopButtons(width, height, size1, size2, message):
     touchingbutton = width <= mouse[0] <= width + size1 and height <= mouse[1] <= height + size2
     
     if touchingbutton is True: 
         pygame.draw.rect(screen, dark_green, [width , height ,140,40])
     else: 
         pygame.draw.rect(screen, green, [width, height,140,40])
-    
+    text = smallfont.render(message, 1, color)
     screen.blit(text , (int(width) + 50, height))
 
 def failurecheck() :
@@ -104,23 +114,14 @@ def failurecheck() :
 
 def gameaudio():
  if  failurecheck() is True:
-   playsound('failure.mp3')
+    failure.play()
 
 
     
 # welcome message
 input("Welcome to the PWRS, the Pressurized Water Reactor Simulator, a realistic nuclear reactor simulator on python \n which gives to the user a very complete control of the main reactor features \n we perfectly know that this simulation might lack some feature that would seriously increse it's \n realism, but please keep in mind that this is a beta version. \n press enter to start the simulation")
-playsound(r'systemready.mp3')
-#audio management thread startup
-class audioThread(threading.Thread):
-  def __init__(self):
-    threading.Thread.__init__(self)
+systemready.play()
 
-  def run(self):
-    gameaudio()
-
-audioThread = audioThread()
-audioThread.start()
 #main loop
 while gameover is False :
   #routines de protection des variables
@@ -196,7 +197,7 @@ while gameover is False :
   pygame.display.update() 
 
 #gameover sequence
-playsound('failure.mp3')
+failure.play()
  
 """
 
